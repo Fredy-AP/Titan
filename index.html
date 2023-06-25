@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Simulación de Presión de Submarino</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background: url('ocean.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .ocean {
+      width: 80%;
+      height: 500px;
+      background-image: url(/OceanoFondo.png);
+     
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submarine-container {
+      width: 80px;
+      height: 100px;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: transform 1s;
+    }
+
+    .submarine {
+      width: 100%;
+      height: 100%;
+    }
+
+    .input-container {
+      margin-top: 20px;
+    }
+
+    .ocean-zones {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      color: rgb(0, 0, 0);
+      font-weight: bold;
+    }
+
+    .zone-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: rgb(0, 0, 0);
+    }
+
+    .zone-label {
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="ocean">
+          <div class="submarine-container">
+            <img src="submarine.png" alt="Submarine" class="submarine">
+          </div>
+          <div class="ocean-zones">
+            <div class="zone-line" style="top: 100px;"></div>
+            <div class="zone-line" style="top: 200px;"></div>
+            <div class="zone-line" style="top: 300px;"></div>
+            <div class="zone-line" style="top: 400px;"></div>
+            <div class="zone-line" style="top: 500px;"></div>
+            <div class="zone-line" style="top: 600px;"></div>
+            <div class="zone-line" style="top: 700px;"></div>
+            <div class="zone-line" style="top: 800px;"></div>
+            <div class="zone-line" style="top: 900px;"></div>
+            <div class="zone-line" style="top: 1000px;"></div>
+            <div class="zone-line" style="top: 1100px;"></div>
+            <div class="zone-line" style="top: 1200px;"></div>
+            <div class="zone-line" style="top: 1300px;"></div>
+            <div class="zone-line" style="top: 1400px;"></div>
+            <div class="zone-line" style="top: 1500px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="input-container">
+          <label for="depth-input">Profundidad (metros):</label>
+          <input type="number" id="depth-input" min="0" step="1" class="form-control">
+          <button id="calculate-btn" class="btn btn-primary mt-2">Calcular presión</button>
+          <div id="pressure-output" class="mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      const submarineContainer = document.querySelector('.submarine-container');
+      const depthInput = document.getElementById('depth-input');
+      const calculateBtn = document.getElementById('calculate-btn');
+      const pressureOutput = document.getElementById('pressure-output');
+
+      calculateBtn.addEventListener('click', function() {
+        const depth = depthInput.value;
+        const depthInPixels = Math.min(depth * 2, 15000); // Limitar la profundidad máxima a 15000 px
+        animateSubmarine(depthInPixels);
+        const pressureValue = calculatePressure(depth);
+        updatePressure(pressureValue);
+      });
+
+      function calculatePressure(depth) {
+        const waterDensity = 1025; // Densidad del agua en kg/m^3
+        const gravity = 9.8; // Gravedad en m/s^2
+        const pressurePa = depth * waterDensity * gravity;
+        const pressureAtm = pressurePa / 101325; // Convertir de pascales a atmósferas
+        return pressureAtm.toFixed(2); // Redondear a 2 decimales
+      }
+
+      function animateSubmarine(depthInPixels) {
+        const depth1000 = Math.floor(depthInPixels / 1000) *10;
+        const depthRemainder = depthInPixels % 10;
+        const translateYValue = depth1000 + (depthRemainder / 2);
+        submarineContainer.style.transform = `translateY(-${translateYValue}px)`;
+      }
+      
+
+      function updatePressure(value) {
+        pressureOutput.textContent = `Presión: ${value} atmósferas`;
+      }
+    });
+  </script>
+</body>
+
+</html>
