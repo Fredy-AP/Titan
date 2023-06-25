@@ -11,10 +11,9 @@
     }
 
     .ocean {
-      width: 80%;
+      width: 100%;
       height: 500px;
       background-image: url(/OceanoFondo.png);
-     
       position: relative;
       overflow: hidden;
     }
@@ -127,12 +126,10 @@
       }
 
       function animateSubmarine(depthInPixels) {
-        const depth1000 = Math.floor(depthInPixels / 1000) *10;
-        const depthRemainder = depthInPixels % 10;
-        const translateYValue = depth1000 + (depthRemainder / 2);
+        const depth1000 = Math.floor(depthInPixels / 1000);
+        const translateYValue = depth1000 * 100;
         submarineContainer.style.transform = `translateY(-${translateYValue}px)`;
       }
-      
 
       function updatePressure(value) {
         pressureOutput.textContent = `Presión: ${value} atmósferas`;
